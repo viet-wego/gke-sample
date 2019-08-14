@@ -31,7 +31,7 @@ resource "google_compute_instance" "bastion-host" {
   provisioner "remote-exec" {
     connection {
       host        = "${google_compute_instance.bastion-host.network_interface.0.access_config.0.nat_ip}"
-      user        = ""
+      user        = "${var.ssh_user}"
       type        = "ssh"
       private_key = "${file(var.ssh_key)}"
     }

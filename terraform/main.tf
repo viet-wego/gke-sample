@@ -68,7 +68,6 @@ module "net-firewall" {
   ssh_source_ranges       = ["0.0.0.0/0"]
 }
 
-
 module "gke" {
   source = "./modules/gke"
 
