@@ -68,41 +68,27 @@ module "net-firewall" {
   ssh_source_ranges       = ["0.0.0.0/0"]
 }
 
+
 module "gke" {
-  source  = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version = "~> 4.1.0"
+  source = "./modules/gke"
 
-  project_id = "${var.project_id}"
-  name       = "${var.cluster_name}"
-  regional   = false
-  region     = "${var.region}"
-  zones      = ["${var.zone}"]
-  network    = "${module.vpc.network_name}"
-  subnetwork = "${module.vpc.subnets_names[0]}"
-  #cluster_ipv4_cidr       = "${module.vpc.subnets_ips[0]}"
-  ip_range_pods            = "${module.vpc.subnets_secondary_ranges[0][1].range_name}"
-  ip_range_services        = "${module.vpc.subnets_secondary_ranges[0][0].range_name}"
-  service_account          = ""
-  enable_private_endpoint  = true
-  enable_private_nodes     = true
-  remove_default_node_pool = true
-  master_ipv4_cidr_block   = "${var.master_cidr}"
+  project_id                = "${var.project_id}"
+  cluster_name              = "${var.cluster_name}"
+  region                    = "${var.region}"
+  zone                      = "${var.zone}"
+  vpc_name                  = "${module.vpc.network_name}"
+  cluster_subnet_name       = "${module.vpc.subnets_names[0]}"
+  po_cidr_range_name        = "${var.subnet_01_po_secondary_range_name}"
+  svc_cidr_range_name       = "${var.subnet_01_svc_secondary_range_name}"
+  master_cidr               = "${var.master_cidr}"
+  cicd_cidr                 = "${module.vpc.subnets_ips[1]}"
+  cicd_subnet_name          = "${module.vpc.subnets_names[1]}"
+  bastion_hosts_cidr        = "${module.vpc.subnets_ips[2]}"
+  bastion_hosts_subnet_name = "${module.vpc.subnets_names[2]}"
 
-  master_authorized_networks_config = [
-    {
-      cidr_blocks = [
-        {
-          cidr_block   = "${module.vpc.subnets_ips[1]}"
-          display_name = "${module.vpc.subnets_names[1]}"
-        },
-        {
-          cidr_block   = "${module.vpc.subnets_ips[2]}"
-          display_name = "${module.vpc.subnets_names[2]}"
-        }
-      ]
-    }
-  ]
+  depends = ["${module.vpc.network_name}"]
 }
+
 
 module "service-account" {
   source                         = "./modules/service-account"
@@ -114,10 +100,10 @@ module "bastion-host" {
   source           = "./modules/bastion-host"
   zone             = "${var.zone}"
   name             = "${var.bastion_host_name}"
-  subnetwork       = "${module.vpc.subnets_names[2]}"
+  subnetwork       = "${var.subnet_03_name}"
   service_account  = "${module.service-account.service_account_email}"
   ssh_key          = "${var.ssh_key}"
-  gke_cluster_name = "${module.gke.name}"
+  gke_cluster_name = "${var.cluster_name}"
 }
 
 

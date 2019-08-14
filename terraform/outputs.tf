@@ -1,10 +1,10 @@
 output "cluster-endpoint" {
-  value       = "${module.gke.endpoint}"
+  value       = "${module.gke.cluster-endpoint}"
   description = "Private endpoint of gke cluster"
 }
 
 output "cluster-name" {
-  value       = "${module.gke.name}"
+  value       = "${module.gke.cluster-name}"
   description = "Name of gke cluster"
 }
 output "bastion-host-instance-name" {
