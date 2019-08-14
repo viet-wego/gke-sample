@@ -8,4 +8,4 @@
 # .tfvars files
 *.tfvars
 
-*plan
+myplan
