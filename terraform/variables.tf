@@ -6,6 +6,10 @@ variable "credentials" {
   description = "Path to JSON key file"
 }
 
+variable "ssh_key" {
+  description = "SSH private key file path to execute initial command"
+}
+
 variable "region" {
   description = "(Optional) The region where we will deploy this"
   default     = "asia-southeast1"
@@ -62,6 +66,11 @@ variable "subnet_03_cidr" {
   default     = "10.20.1.0/28"
 }
 
+variable "developer_service_account_name" {
+  description = "(Optional) Service account name for developer"
+  default     = "developer-service-account"
+}
+
 variable "cluster_name" {
   description = "(Optional) Cluster name"
   default     = "gke-sample-cluster"
@@ -72,7 +81,10 @@ variable "master_cidr" {
   default     = "172.16.0.0/28"
 }
 
-
+variable "bastion_host_name" {
+  description = "Name of the bastion host VM instance"
+  default     = "bastion-host-01"
+}
 
 
 

@@ -1,18 +1,18 @@
-output "vpc" {
-  value       = "${module.vpc.network_name}"
-  description = "Self link of the VPC"
+output "cluster-endpoint" {
+  value       = "${module.gke.endpoint}"
+  description = "Private endpoint of gke cluster"
 }
 
-output "subnets" {
-  value       = "${module.vpc.subnets_names}"
-  description = "Self links of subnets"
+output "cluster-name" {
+  value       = "${module.gke.name}"
+  description = "Name of gke cluster"
+}
+output "bastion-host-instance-name" {
+  value       = "${module.bastion-host.instance_name}"
+  description = "Name of bastion host VM instance"
 }
 
-output "lol" {
-  value       = "${module.vpc.subnets_secondary_ranges}"
-  description = "Secondary ip ranges"
-}
-
-output "name" {
-  value = "${module.vpc.subnets_regions}"
+output "bastion-host-user" {
+  value       = "${module.bastion-host.user}"
+  description = "User to be used when ssh to bastion host"
 }

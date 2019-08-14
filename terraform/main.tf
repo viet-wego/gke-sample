@@ -103,3 +103,22 @@ module "gke" {
     }
   ]
 }
+
+module "service-account" {
+  source                         = "./modules/service-account"
+  developer_service_account_name = "${var.developer_service_account_name}"
+  project_id                     = "${var.project_id}"
+}
+
+module "bastion-host" {
+  source           = "./modules/bastion-host"
+  zone             = "${var.zone}"
+  name             = "${var.bastion_host_name}"
+  subnetwork       = "${module.vpc.subnets_names[2]}"
+  service_account  = "${module.service-account.service_account_email}"
+  ssh_key          = "${var.ssh_key}"
+  gke_cluster_name = "${module.gke.name}"
+}
+
+
+
