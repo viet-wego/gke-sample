@@ -2,17 +2,22 @@
 
 ##  Infrastructure
 
-Location: `./infrastructure`
+### Architect
 
-        cd infrastructure
+![image](./infrastructure/gke-sample-architect.jpg)
 
-Prepare:
+### Pre-requisites 
+
+- Install [Terraform](https://www.terraform.io/) version `0.12.0` or newer.
+- Install [Terragrunt](https://github.com/gruntwork-io/terragrunt) version `v0.19.0` or newer.
+
+### Prepare data:
 
 - Replace dummy data at `inputs{}` sections with yours:
-  - `./live/sample/terragrunt.hcl`: all
-  - `./live/sample/bastion-host/terragrunt.hcl`: `ssh_key`
+  - `./infrastructure/live/sample/terragrunt.hcl`: all inputs
+  - `./infrastructure/live/sample/bastion-host/terragrunt.hcl`: `ssh_key`
 
-Run:
+### Deploy:
 
         # given you're at root level of repo
         cd ./infrastructure/live/sample
