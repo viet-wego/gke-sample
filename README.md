@@ -2,7 +2,7 @@
 
 ##  Infrastructure
 
-### Architect
+### Architecture
 
 ![image](./infrastructure/gke-sample-architect.jpg)
 

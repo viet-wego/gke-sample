@@ -1,10 +1,12 @@
 provider "google" {
+  version     = "~> 2.12"
   project     = "${var.project_id}"
   region      = "${var.region}"
   credentials = "${file(var.credentials)}"
 }
 
 provider "google-beta" {
+  version     = "~> 2.12"
   project     = "${var.project_id}"
   region      = "${var.region}"
   credentials = "${file(var.credentials)}"
