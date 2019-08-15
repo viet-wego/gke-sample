@@ -9,11 +9,9 @@ variable "ssh_key" {
 }
 variable "region" {
   description = "The region where we will deploy this"
-  default     = "asia-southeast1"
 }
 variable "zone" {
-  description = "(Optional) The zone where we will deploy this"
-  default     = "asia-southeast1-b"
+  description = "The zone where we will deploy this"
 }
 
 variable "bastion_host_name" {

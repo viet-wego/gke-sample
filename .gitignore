@@ -11,3 +11,4 @@
 *plan
 
 **/test/*
+**/terragrunt-cache/*

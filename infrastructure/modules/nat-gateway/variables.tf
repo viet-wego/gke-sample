@@ -12,3 +12,18 @@ variable "region" {
 variable "vpc_name" {
   description = "The name of our VPC"
 }
+
+variable "router_name" {
+
+}
+
+variable "nat_ext_addresses_name_suffix" {
+
+}
+variable "nat_gateway_name" {
+
+}
+variable "private_subnet_name" {
+
+}
+
