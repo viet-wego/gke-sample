@@ -1,5 +1,5 @@
 output "instance_name" {
-  value = "${var.name}"
+  value = "${google_compute_instance.bastion-host.name}"
 }
 
 output "user" {

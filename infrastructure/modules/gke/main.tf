@@ -1,31 +1,28 @@
 
-resource "null_resource" "depends_on" {
-  triggers = {
-    depends_on = "${join("", var.depends)}"
-  }
+provider "google" {
+  project     = "${var.project_id}"
+  region      = "${var.region}"
+  credentials = "${file(var.credentials)}"
 }
 
-data "google_compute_subnetwork" "cluster-subnet" {
-  name = "${var.cluster_subnet_name}"
-  depends_on = [
-    "null_resource.depends_on"
-  ]
+provider "google-beta" {
+  project     = "${var.project_id}"
+  region      = "${var.region}"
+  credentials = "${file(var.credentials)}"
 }
-
-
 module "private-cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
   version = "~> 4.1.0"
 
   project_id               = "${var.project_id}"
-  name                     = "${var.cluster_name}"
+  name                     = "${var.gke_cluster_name}"
   regional                 = false
   region                   = "${var.region}"
   zones                    = ["${var.zone}"]
   network                  = "${var.vpc_name}"
   subnetwork               = "${var.cluster_subnet_name}"
-  ip_range_pods            = "${var.po_cidr_range_name}"
-  ip_range_services        = "${var.svc_cidr_range_name}"
+  ip_range_pods            = "${var.cluster_po_ip_range_name}"
+  ip_range_services        = "${var.cluster_svc_ip_range_name}"
   service_account          = ""
   enable_private_endpoint  = true
   enable_private_nodes     = true
@@ -36,12 +33,12 @@ module "private-cluster" {
     {
       cidr_blocks = [
         {
-          cidr_block   = "${var.cicd_cidr}"
+          cidr_block   = "${var.cicd_subnet_cidr}"
           display_name = "${var.cicd_subnet_name}"
         },
         {
-          cidr_block   = "${var.bastion_hosts_cidr}"
-          display_name = "${var.bastion_hosts_subnet_name}"
+          cidr_block   = "${var.bastion_host_subnet_cidr}"
+          display_name = "${var.bastion_host_subnet_name}"
         }
       ]
     }
