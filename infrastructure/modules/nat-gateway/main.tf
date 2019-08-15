@@ -20,8 +20,7 @@ resource "google_compute_router" "router" {
 }
 
 resource "google_compute_address" "address" {
-  count  = 2
-  name   = "${var.nat_ext_addresses_name_suffix}-${count.index}"
+  name   = "${var.nat_ext_addresses_name}"
   region = "${var.region}"
 }
 
@@ -30,7 +29,7 @@ resource "google_compute_router_nat" "nat-gateway" {
   router                             = "${google_compute_router.router.name}"
   region                             = "${var.region}"
   nat_ip_allocate_option             = "MANUAL_ONLY"
-  nat_ips                            = ["${google_compute_address.address[*].self_link}"]
+  nat_ips                            = ["${google_compute_address.address.self_link}"]
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
   subnetwork {
     name                    = "${var.private_subnet_name}"

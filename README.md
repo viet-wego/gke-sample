@@ -2,36 +2,28 @@
 
 ##  Infrastructure
 
-Location: `./terraform`
+Location: `./infrastructure`
 
-        cd terraform
+        cd infrastructure
 
 Prepare:
 
-- You need to create a variables named `my_vars.tfvars` with the content below:
-
-        # Your gcp project id
-        project_id  = "your-project-id"
-
-        # Path to json private key file of your service account (make sure it has sufficient permissions (I'm testing using admin) on IAM, Compute Engine,  Network, Kubernetes Engine ) 
-        credentials = "/path/to/private-key.json"
-
-        # Path to your gcp compute engine rsa private key
-        ssh_key     = "/path/to/gcp-compute-engine-rsa-private-key"
-
+- Replace dummy data at `inputs{}` sections with yours:
+  - `./live/sample/terragrunt.hcl`: all
+  - `./live/sample/bastion-host/terragrunt.hcl`: `ssh_key`
 
 Run:
 
-        # Install all necessary plugins & dependencies
-        terraform init
+        # given you're at root level of repo
+        cd ./infrastructure/live/sample
         # To verify plan before apply
-        terraform plan -var-file=my_vars.tfvars
-        # Apply the plan to create infrastructure
-        terraform apply -var-file=my_vars.tfvars -auto-approve
+        terragrunt plan-all
+        # To create the infrastructure
+        terragrunt apply-all -auto-approve
 
-Clean up:
+        # To destroy the infrastructure
+        terragrunt destroy-all -auto-approve
 
-        terraform destroy -var-file=z_vars.tfvars -auto-approve
 
 ##  Application
 

@@ -17,7 +17,7 @@ variable "router_name" {
 
 }
 
-variable "nat_ext_addresses_name_suffix" {
+variable "nat_ext_addresses_name" {
 
 }
 variable "nat_gateway_name" {
