@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: example
+spec:
+  type: NodePort
+  ports:
+  - port: 3030
+    name: http-server
+    targetPort: 3030
+  selector:
+    name: example

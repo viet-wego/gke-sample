@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: external-ingress
+spec:
+  tls:
+    - hosts:
+      - example.co
+      secretName: example-co-tls-secret
+  rules:
+    - host: example.co
+      http:
+        paths:
+          - backend:
+              serviceName: example
+              servicePort: 3030

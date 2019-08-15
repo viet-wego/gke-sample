@@ -25,19 +25,13 @@
         # To verify plan before apply
         terragrunt plan-all
         # To create the infrastructure
-        terragrunt apply-all -auto-approve
-
-        # To destroy the infrastructure
-        terragrunt destroy-all -auto-approve
+        terragrunt apply-all
+        # (and answer `y`)
 
 ### Access cluster:
 
-- Get instance name & user to ssh to created bastion host
-
-        terragrunt output-all | grep instance_name
-        terragrunt output-all | grep user
-
-- SSH to bastion host using `gcloud` CLI
+- After deploying successfully, you will get 2 outputs: `instance_name` & `user`. 
+- SSH to bastion host using `gcloud` CLI with 2 outputs above.
 
         gcloud compute ssh <user>@<instance_name>
 
@@ -45,6 +39,23 @@
 
         kubectl get po --all-namespaces
 
+### Clean up        
 
-##  Application
+        # given you're at root level of repo
+        cd ./infrastructure/live/sample
+        # To destroy the infrastructure
+        terragrunt destroy-all
+        # (and answer `y`)
 
+##  K8s cluster
+
+### Set up cluster
+
+Folder `./kustomize/init-cluster` contains 3 files to set up basic configuration for the cluster: namespaces, quotas, limits
+
+## Application
+
+Folder `./kustomize/app` contains yaml files to deploy an example application to be deployed to `dev` namespace of the cluster.
+
+        cd ./kustomize/app
+        kubectl apply -k kustomization-dev.yml

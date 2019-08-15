@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      name: example
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: example
+    spec:
+      containers:
+      - env:
+        - name: PORT
+          value: '3030'
+        # I put the raw DB URL here purposely to indicate that we can connect to CloudSQL by internal IP
+        - name: DB_URL
+          value: postgres://viet-dev:Abcd1234DEFG@10.20.30.40:5432/example_dev
+        - name: DB_MIN_POOL_SIZE
+          value: '2'
+        - name: DB_MAX_POOL_SIZE
+          value: '5'
+        - name: JWT_SECRET
+          value: ThisIsAFukinSecretKey
+        - name: REDIS_HOST
+          value: example-redis.dev.svc.cluster.local
+        - name: REDIS_PORT
+          value: '6379'
+        - name: DB_DEBUG
+          value: '1'
+        - name: OTP_VALID_SECONDS
+          value: '60'
+        - name: EMAIL_SENDER
+          value: 'dev@example.co'
+        - name: EMAIL_SENDER_NAME
+          value: 'Example - Development'
+        - name: ENQUIRY_RECEIVER
+          value: 'viet@example.co'
+        - name: NEXTMO_URL
+          value: ''
+        - name: NEXTMO_KEY
+          valueFrom:
+            secretKeyRef:
+              name: example
+              key: nextmo_key
+        - name: NEXTMO_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: example
+              key: nextmo_secret
+        - name: MANDRILL_HOST
+          value: 'smtp.mandrillapp.com'
+        - name: MANDRILL_PORT
+          value: '587'
+        - name: MANDRILL_USER
+          valueFrom:
+            secretKeyRef:
+              name: example
+              key: mandrill_user
+        - name: MANDRILL_KEY
+          valueFrom:
+            secretKeyRef:
+              name: example
+              key: mandrill_key
+        image: asia.gcr.io/my-project/example:dev-190710-89
+        imagePullPolicy: IfNotPresent
+        name: example
+        ports:
+        - containerPort: 3030
+          protocol: TCP
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 3030
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 3030
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 300m
+            memory: 512Mi
+          requests:
+            cpu: 150m
+            memory: 256Mi

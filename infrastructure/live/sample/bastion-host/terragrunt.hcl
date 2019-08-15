@@ -7,7 +7,7 @@ include {
 }
 
 dependencies {
-  paths = ["../vpc", "../firewall", "../nat-gateway"]
+  paths = ["../vpc", "../firewall", "../nat-gateway", "../gke"]
 }
 
 inputs = {
