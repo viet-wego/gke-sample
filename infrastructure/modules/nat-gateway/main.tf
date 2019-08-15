@@ -12,6 +12,11 @@ provider "google-beta" {
   region      = "${var.region}"
 }
 
+data "google_compute_subnetwork" "private-subnet" {
+  name   = "${var.private_subnet_name}"
+  region = "${var.region}"
+}
+
 resource "google_compute_router" "router" {
   name    = "${var.router_name}"
   region  = "${var.region}"
@@ -34,7 +39,7 @@ resource "google_compute_router_nat" "nat-gateway" {
   nat_ips                            = ["${google_compute_address.address.self_link}"]
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
   subnetwork {
-    name                    = "${var.private_subnet_name}"
+    name                    = "${data.google_compute_subnetwork.private-subnet.self_link}"
     source_ip_ranges_to_nat = ["ALL_IP_RANGES"]
   }
   log_config {
